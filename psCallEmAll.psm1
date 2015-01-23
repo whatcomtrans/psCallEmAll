@@ -16,8 +16,8 @@
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
     }
@@ -57,8 +57,8 @@ function Get-ListContents {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
     }
@@ -96,8 +96,8 @@ function Delete-Person {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
     }
@@ -141,8 +141,8 @@ function Create-PersonID {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
         [com.callemall.powershell.CreatePersonIDRequestType] $request = $CallEmAllProxy.createRequestObject("CreatePersonIDRequestType")
@@ -192,8 +192,8 @@ function Add-PersonsToList {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
         [com.callemall.powershell.AddPersonsToListRequestType] $request = $CallEmAllProxy.createRequestObject("AddPersonsToListRequestType")
@@ -240,8 +240,8 @@ function Get-ListIDByName {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
     }
@@ -281,8 +281,8 @@ function Create-NewList {
         Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
             Param ([String] $shortType)
             $request = New-Object -Type "com.callemall.powershell.$shortType"
-            if ($request.GetType().DeclaredProperties.Name -contains "username") {$request.username = $this.username}
-            if ($request.GetType().DeclaredProperties.Name -contains "pin") {$request.pin = $this.pin}
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
             return $request
         }
     }
