@@ -62,7 +62,7 @@ function Get-ListContents {
             return $request
         }
     }
-	Process {  
+	Process {
         [com.callemall.powershell.GetListContentsRequestType] $request = $CallEmAllProxy.createRequestObject("GetListcontentsRequestType")
         $request.listID = $ListID
         $request.pageSize = $PageSize
@@ -147,7 +147,7 @@ function Create-PersonID {
         }
         [com.callemall.powershell.CreatePersonIDRequestType] $request = $CallEmAllProxy.createRequestObject("CreatePersonIDRequestType")
     }
-	Process {          
+	Process {
         [com.callemall.powershell.CreatePersonIDDetailData] $person = $CallEmAllProxy.createRequestObject("CreatePersonIDDetailData")
         $person.FirstName = $FirstName
         $person.LastName = $LastName
@@ -167,6 +167,71 @@ function Create-PersonID {
         }
     }
 }
+
+function Update-PersonID {
+	[CmdletBinding(SupportsShouldProcess=$true)]
+	Param(
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+            [String] $PersonID,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+            [String] $FirstName,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+            [String] $LastName,
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+            [String] $PrimaryPhone,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true)]
+            [String] $SecondaryPhone,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true)]
+            [String] $TertiaryPhone,
+        [Parameter(Mandatory=$false,ValueFromPipelineByPropertyName=$true)]
+            [String] $Notes,
+        [Parameter(Mandatory=$true,HelpMessage="URL to the WSDL, defaults to Staging")]
+		    [String]$WSDL = "http://staging-api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?wsdl",
+        [Parameter(Mandatory=$true,HelpMessage="Username to connect with")]
+		    [String]$Username,
+        [Parameter(Mandatory=$true,HelpMessage="Pin to connect with")]
+		    [String]$Pin
+    )
+    Begin {
+        $CallEmAllProxy = New-WebServiceProxy -Uri $WSDL -Namespace "com.callemall.powershell" -Class "psCallEmAll"
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "pin" -Value $Pin -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "username" -Value $Username -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "WSDL" -Value $WSDL -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
+            Param ([String] $shortType)
+            $request = New-Object -Type "com.callemall.powershell.$shortType"
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
+            return $request
+        }
+    }
+	Process {
+        [com.callemall.powershell.UpdatePersonIDRequestType] $request = $CallEmAllProxy.createRequestObject("UpdatePersonIDRequestType")
+        [com.callemall.powershell.PersonDetailData] $person = $CallEmAllProxy.createRequestObject("PersonDetailData")
+
+        $person.PersonID = $PersonID
+
+        $person.FirstName = $FirstName
+        $person.LastName = $LastName
+        $person.PrimaryPhone = $PrimaryPhone
+        $person.SecondaryPhone = $SecondaryPhone
+        $person.TertiaryPhone = $TertiaryPhone
+        $person.Notes = $Notes
+
+        $request.PersonRecords += $person
+
+        [com.callemall.powershell.UpdatePersonIDResponseType] $response = $CallEmAllProxy.UpdatePersonID($request)
+        if ($response.errorCode -ne 0) {
+            return $response.errorMessage
+        } Else {
+            return $response.updateFailures
+        }
+
+    }
+    End {
+    }
+}
+
 
 function Add-PersonsToList {
 	[CmdletBinding(SupportsShouldProcess=$true,DefaultParameterSetName="SingleID")]
@@ -286,7 +351,7 @@ function Create-NewList {
             return $request
         }
     }
-	Process {          
+	Process {
         [com.callemall.powershell.CreateNewListRequestType] $request = $CallEmAllProxy.createRequestObject("CreateNewListRequestType")
         $request.listName = $ListName
         if ($IsAutoReplyOn) {
@@ -304,5 +369,41 @@ function Create-NewList {
     }
 }
 
+function Get-PersonIDDetails‏ {
+	[CmdletBinding(SupportsShouldProcess=$false)]
+	Param(
+        [Parameter(Mandatory=$true,ValueFromPipelineByPropertyName=$true)]
+            [String]$PersonID,
+        [Parameter(Mandatory=$true,HelpMessage="URL to the WSDL, defaults to Staging")]
+		    [String]$WSDL = "http://staging-api.call-em-all.com/webservices/ceaapi_v3-2-13.asmx?wsdl",
+        [Parameter(Mandatory=$true,HelpMessage="Username to connect with")]
+		    [String]$Username,
+        [Parameter(Mandatory=$true,HelpMessage="Pin to connect with")]
+		    [String]$Pin
+    )
+    Begin {
+        $CallEmAllProxy = New-WebServiceProxy -Uri $WSDL -Namespace "com.callemall.powershell" -Class "psCallEmAll"
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "pin" -Value $Pin -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "username" -Value $Username -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType NoteProperty -Name "WSDL" -Value $WSDL -Force
+        Add-Member -InputObject $CallEmAllProxy -MemberType ScriptMethod -Name "createRequestObject" -Force -Value {
+            Param ([String] $shortType)
+            $request = New-Object -Type "com.callemall.powershell.$shortType"
+            if ($request.GetType().GetProperties().Name -contains "username") {$request.username = $this.username}
+            if ($request.GetType().GetProperties().Name -contains "pin") {$request.pin = $this.pin}
+            return $request
+        }
+    }
+	Process {
+            [com.callemall.powershell.GetPersonIDDetailsRequestType] $request = $CallEmAllProxy.createRequestObject("GetPersonIDDetailsRequestType")
+            $request.personID = $PersonID
+            [com.callemall.powershell.GetPersonIDDetailsResponseType] $response = $CallEmAllProxy.GetPersonIDDetails($request)
+            If ($response.errorCode -ne 0) {
+                return $response.errorMessage
+            } Else {
+                return $response.ListContents
+            }
+    }
+}
 
 Export-ModuleMember -Function *
