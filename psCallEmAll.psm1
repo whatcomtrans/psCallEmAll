@@ -163,7 +163,7 @@ function Create-PersonID {
         if ($response.errorCode -ne 0) {
             return $response.errorMessage
         } Else {
-            return $request.personsToAdd
+            return $response.InsertResults
         }
     }
 }
